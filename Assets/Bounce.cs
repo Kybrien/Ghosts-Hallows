@@ -1,28 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bounce : MonoBehaviour
 {
-    public float bounceForce = 10f; // Force de rebond
-
+    public float initialBounceForce = 25f; // Force de rebond initiale
+    public float minBounceForce = 5f; // Force de rebond minimale
+    public float bounceForceReductionFactor = 0.2f; // Facteur de réduction de la force de rebond
+    private float currentBounceForce; // Force de rebond actuelle
     private Rigidbody rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>(); // Récupère le composant Rigidbody
-        rb.velocity = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized * bounceForce; // Donne une vélocité initiale à la sphère
+        currentBounceForce = initialBounceForce; // Initialise la force de rebond actuelle
+       
     }
 
-    void Update()
+
+    void OnCollisionEnter(Collision collision)
     {
-        // Vérifie si la sphère sort du bas de l'écran
-        if (transform.position.y < -5f)
+        if (collision.gameObject.CompareTag("Player"))
         {
-            // Inverse la direction de la vélocité en Y et applique la force de rebond
-            rb.velocity = new Vector3(rb.velocity.x, bounceForce, rb.velocity.z);
+            // Si la collision est avec un objet portant le tag "Joueur", ne pas réduire la force de rebond
+            currentBounceForce = initialBounceForce;
         }
+        else
+        {
+            // Si la collision est avec un autre objet, réduit la force de rebond
+            currentBounceForce = Mathf.Max(minBounceForce, currentBounceForce * bounceForceReductionFactor);
+        }
+
+        // Inverse la direction de la vélocité en Y et applique la force de rebond
+        rb.velocity = new Vector3(rb.velocity.x, currentBounceForce, rb.velocity.z);
     }
 }
-
 
