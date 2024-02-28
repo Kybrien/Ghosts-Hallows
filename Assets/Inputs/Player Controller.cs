@@ -1,13 +1,14 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float jumpHeight = 1.0f;
     [SerializeField] private float gravityValue = -9.81f;
+    private Vector3 moveDirection = Vector3.zero;
 
 
     private CharacterController controller;
@@ -41,13 +42,11 @@ public class PlayerController : MonoBehaviour
             playerVelocity.y = 0f;
         }
 
-        Vector3 move = new Vector3(movementInput.x , 0, movementInput.y);
-        controller.Move(move * Time.deltaTime * playerSpeed);
 
-        /*if (move != Vector3.zero)
-        {
-            gameObject.transform.forward = move;
-        }*/
+        Vector3 forward = transform.TransformDirection(Vector3.forward);
+        Vector3 right = transform.TransformDirection(Vector3.right);
+        moveDirection = (forward * movementInput.y) + (right * movementInput.x);
+        controller.Move(moveDirection * Time.deltaTime * playerSpeed);
 
         // Changes the height position of the player..
         if (jumped && groundedPlayer)
@@ -55,9 +54,9 @@ public class PlayerController : MonoBehaviour
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
         }
 
-
-
         playerVelocity.y += gravityValue * Time.deltaTime;
+
+        //permet de gerer le saut
         controller.Move(playerVelocity * Time.deltaTime);
     }
 }
