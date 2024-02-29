@@ -12,38 +12,44 @@ namespace Polyperfect.Universal
 
         private Vector2 joystickInput = Vector2.zero;
 
+        private PlayerInput playerInput;
+        public int playerID;
 
-        /*public int playerID = 1;*/
 
         void Start()
         {
+            playerInput = GetComponent<PlayerInput>();
+
             Cursor.lockState = CursorLockMode.Locked;
+            playerID = PlayerManager.Instance.RegisterPlayer();
         }
 
         void Update()
         {
-            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime * 50;
-            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime * 50;
+            
+            if (playerID == 1)
+            {
+                float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime * 50;
+                float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime * 50;
 
-            // Apply mouse movement for rotation
-            xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-            playerBody.Rotate(Vector3.up * mouseX);
+                ApplyRotation(mouseX, mouseY);
+            }
+            if (playerID == 2 || playerID == 3 || playerID == 4)
+            {
+                float joystickX = joystickInput.x * controllerSensitivity * Time.deltaTime;
+                float joystickY = joystickInput.y * controllerSensitivity * Time.deltaTime;
 
-            // Apply joystick movement for rotation
-            float joystickX = joystickInput.x * controllerSensitivity * Time.deltaTime;
-            float joystickY = joystickInput.y * controllerSensitivity * Time.deltaTime;
+                ApplyRotation(joystickX, joystickY);
+            }
 
-            // Apply joystick Y for up and down camera rotation
-            xRotation -= joystickY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-
-            // Apply joystick X for left and right body rotation
-            playerBody.Rotate(Vector3.up * joystickX);
         }
-
+        void ApplyRotation(float x, float y)
+        {
+            xRotation -= y;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            playerBody.Rotate(Vector3.up * x);
+        }
         public void OnMove(InputAction.CallbackContext context)
         {
             joystickInput = context.ReadValue<Vector2>();
