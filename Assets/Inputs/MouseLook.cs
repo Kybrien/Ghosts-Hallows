@@ -12,6 +12,9 @@ namespace Polyperfect.Universal
 
         private Vector2 joystickInput = Vector2.zero;
 
+
+        /*public int playerID = 1;*/
+
         void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
