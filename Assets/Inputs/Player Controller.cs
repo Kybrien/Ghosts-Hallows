@@ -1,83 +1,71 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float playerSpeed = 2.0f;
-    [SerializeField] private float jumpHeight = 1.0f;
-    [SerializeField] private float gravityValue = -9.81f;
-    private Vector3 moveDirection = Vector3.zero;
+    [SerializeField] private float jumpForce = 5.0f;
+    [SerializeField] private float sprintSpeedMultiplier = 1.5f;
+    [SerializeField] private float crouchSpeedMultiplier = 0.5f;
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private float standHeight = 1.0f;
+    [SerializeField] private float crouchHeight = 0.5f;
+    private bool isGrounded = false;
 
-    [SerializeField] private float sprintSpeedMultiplier = 1.5f; // Define a sprint speed multiplier
-    [SerializeField] private Transform cameraTransform; // Assign your camera's transform here in the inspector
-    [SerializeField] private float standHeight = 1.0f; // Standard height of the camera
-    [SerializeField] private float crouchHeight = 0.5f; // Height of the camera while crouching
-    [SerializeField] private float crouchSpeedMultiplier = 0.5f; // Speed at which the camera lowers/raises to match the crouch/stand height
+    private Rigidbody rb;
+    private Vector2 movementInput = Vector2.zero;
     private bool isSprinting = false;
     private bool isCrouching = false;
-
-
-
-
-    private CharacterController controller;
-    private Vector3 playerVelocity;
-    private bool groundedPlayer;
-
-    private Vector2 movementInput = Vector2.zero;
-    private bool jumped;
+    private bool jumped = false;
 
     private void Start()
     {
-        controller = gameObject.GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>();
-
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        jumped = context.ReadValue<float>() > 0.0f; // Lecture de la valeur du contexte et conversion en booléen
+        jumped = context.ReadValue<float>() > 0.0f;
     }
 
-    //Chat GPT
     public void OnSprint(InputAction.CallbackContext context)
     {
-        isSprinting = context.ReadValue<float>() > 0.0f; // Check if sprint button is pressed
+        isSprinting = context.ReadValue<float>() > 0.0f;
     }
+
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        isCrouching = context.ReadValue<float>() > 0.0f; // Check if crouch button is pressed
-                                                         // Here, you would also handle changing the character's collider size or position for crouching
+        isCrouching = context.ReadValue<float>() > 0.0f;
     }
 
-
-
-    void Update()
+    private void FixedUpdate()
     {
-        groundedPlayer = controller.isGrounded;
-        if (groundedPlayer && playerVelocity.y < 0)
+        Vector3 movement = new Vector3(movementInput.x, 0, movementInput.y);
+        movement = transform.TransformDirection(movement);
+        // Réduction des valeurs de vitesse
+        movement *= playerSpeed * (isSprinting ? sprintSpeedMultiplier : 1) * (isCrouching ? crouchSpeedMultiplier : 1);
+
+        rb.AddForce(movement, ForceMode.Acceleration); // Utilisation de ForceMode.Force pour une application plus naturelle
+
+        if (jumped && Mathf.Abs(rb.velocity.y) < 1.00f)
         {
-            playerVelocity.y = 0f;
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+        if (jumped && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;  // Réinitialiser isGrounded
         }
 
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 right = transform.TransformDirection(Vector3.right);
-        moveDirection = (forward * movementInput.y) + (right * movementInput.x);
-
-        // Determine the current speed based on sprinting and crouching state
-        float currentSpeed = playerSpeed;
-        if (isSprinting)
-        {
-            currentSpeed *= sprintSpeedMultiplier;
-        }
+        // Gestion de la hauteur de la caméra pour l'accroupissement
         if (isCrouching)
         {
-            currentSpeed *= crouchSpeedMultiplier;
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, crouchHeight, cameraTransform.localPosition.z);
         }
         else
@@ -85,18 +73,7 @@ public class PlayerController : MonoBehaviour
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, standHeight, cameraTransform.localPosition.z);
         }
 
-        // Move the player with the current speed
-        controller.Move(moveDirection * Time.deltaTime * currentSpeed);
-
-        // Changes the height position of the player..
-        if (jumped && groundedPlayer)
-        {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-        }
-
-        playerVelocity.y += gravityValue * Time.deltaTime;
-        // Handle jump and apply gravity
-        controller.Move(playerVelocity * Time.deltaTime);
+        jumped = false; // Réinitialisation de l'état de saut
     }
-}
 
+}
