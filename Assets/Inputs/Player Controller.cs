@@ -18,10 +18,11 @@ public class PlayerController : MonoBehaviour
     private bool isSprinting = false;
     private bool isCrouching = false;
     private bool jumped = false;
-
+    private CapsuleCollider collider;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        collider = GetComponent<CapsuleCollider>();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -71,6 +72,14 @@ public class PlayerController : MonoBehaviour
         else
         {
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, standHeight, cameraTransform.localPosition.z);
+        }
+        if (Physics.Raycast(transform.position, -transform.up, collider.height * 0.5f + 0.1f))
+        {
+            Debug.Log("Ground");
+        }
+        else
+        {
+            Debug.Log("Air");
         }
 
         jumped = false; // Réinitialisation de l'état de saut

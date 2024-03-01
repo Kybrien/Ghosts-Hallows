@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ball
+  - FxTemporaire
+  - Filet
+  - Goal
+  - TP
+  - GoalP2
+  - GoalP1
   layers:
   - Default
   - TransparentFX
