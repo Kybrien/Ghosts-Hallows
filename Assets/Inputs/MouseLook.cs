@@ -5,6 +5,7 @@ namespace Polyperfect.Universal
 {
     public class MouseLook : MonoBehaviour
     {
+
         public float mouseSensitivity = 100f;
         public float controllerSensitivity = 100f;
         public Transform playerBody;
@@ -41,6 +42,7 @@ namespace Polyperfect.Universal
 
                 ApplyRotation(joystickX, joystickY);
             }
+
 
         }
         void ApplyRotation(float x, float y)

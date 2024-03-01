@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private bool isCrouching = false;
     private bool jumped = false;
 
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
