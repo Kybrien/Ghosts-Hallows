@@ -43,7 +43,6 @@ namespace Polyperfect.Universal
                 ApplyRotation(joystickX, joystickY);
             }
 
-
         }
         void ApplyRotation(float x, float y)
         {

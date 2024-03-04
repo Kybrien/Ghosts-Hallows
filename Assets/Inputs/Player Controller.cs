@@ -5,20 +5,31 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+
+
+    [Header("Player Settings")]
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float jumpForce = 5.0f;
+    [SerializeField] private float jetpackForce = 5.0f;
     [SerializeField] private float sprintSpeedMultiplier = 1.5f;
     [SerializeField] private float crouchSpeedMultiplier = 0.5f;
+    
+
+    [Header("Camera Settings")]
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float standHeight = 1.0f;
     [SerializeField] private float crouchHeight = 0.5f;
+
+    [Header("Stamina Settings")]
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float staminaDrain = 10f;
     [SerializeField] private float staminaRegenRate = 5f;
     [SerializeField] private float jumpStaminaCost = 20f;
+    [SerializeField] private float jetpackStaminaCost = 5f;
+
 
     private float currentStamina;
-    private bool isGrounded = false;
+    private bool isGrounded = true;
     private Rigidbody rb;
     private Vector2 movementInput = Vector2.zero;
     public bool isSprinting = false;
@@ -42,14 +53,31 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    //OnJump PERSO
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (currentStamina >= jumpStaminaCost)
+        if (currentStamina >= jumpStaminaCost && isGrounded && context.phase == InputActionPhase.Started)
         {
+            Debug.Log("Jump");
             jumped = context.ReadValue<float>() > 0.0f;
             if (jumped) currentStamina -= jumpStaminaCost;
+            isGrounded = false;
+
+            //TEST
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+
+        if (currentStamina >= jetpackStaminaCost && !isGrounded && context.phase == InputActionPhase.Performed)
+        {
+            Debug.Log("Jetpack");
+            rb.AddForce(Vector3.up * jetpackForce, ForceMode.Impulse);
+            currentStamina -= jetpackStaminaCost;
+            jumped = false;
+        }
+
+
     }
+
 
     public void OnSprint(InputAction.CallbackContext context)
     {
@@ -61,7 +89,13 @@ public class PlayerController : MonoBehaviour
         isCrouching = context.ReadValue<float>() > 0.0f;
     }
 
-
+    void OnCollisionStay(Collision collision)
+    {
+        if(collision.transform.parent.tag == "Map")
+        {
+            isGrounded = true;
+        }
+    }
 
     private void FixedUpdate()
     {
@@ -81,12 +115,6 @@ public class PlayerController : MonoBehaviour
         }
 
         rb.AddForce(movement, ForceMode.Acceleration);
-
-        if (jumped && isGrounded)
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            isGrounded = false;
-        }
 
         if (isCrouching)
         {
