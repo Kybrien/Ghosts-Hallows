@@ -316,7 +316,7 @@ MonoBehaviour:
   scoreJ2: 0
   J1Score: {fileID: 195064661}
   J2Score: {fileID: 531263905}
-  Winner: {fileID: 0}
+  Winner: {fileID: 418341286}
 --- !u!114 &195064661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -997,9 +997,8 @@ GameObject:
   - component: {fileID: 504664796}
   - component: {fileID: 504664799}
   - component: {fileID: 504664798}
-  - component: {fileID: 504664797}
   m_Layer: 5
-  m_Name: playerOverlayScore (1)
+  m_Name: "S\xE9paration"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1024,25 +1023,6 @@ RectTransform:
   m_AnchoredPosition: {x: 115, y: -25}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &504664797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 504664795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2afb4436bcca78548a595d6c5659174e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  respawnPoint: {fileID: 0}
-  scoreValue: 1
-  scoreJ1: 0
-  scoreJ2: 0
-  J1Score: {fileID: 0}
-  J2Score: {fileID: 0}
-  Winner: {fileID: 0}
 --- !u!114 &504664798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1194,9 +1174,9 @@ MonoBehaviour:
   scoreValue: 1
   scoreJ1: 0
   scoreJ2: 0
-  J1Score: {fileID: 0}
-  J2Score: {fileID: 0}
-  Winner: {fileID: 0}
+  J1Score: {fileID: 195064661}
+  J2Score: {fileID: 531263905}
+  Winner: {fileID: 418341286}
 --- !u!114 &531263905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1891,6 +1871,10 @@ PrefabInstance:
       value: -0.472
       objectReference: {fileID: 0}
     - target: {fileID: 8555062971863981459, guid: 77eeb090d4e6ce74fb3c84d51271febc, type: 3}
+      propertyPath: Winner
+      value: 
+      objectReference: {fileID: 418341286}
+    - target: {fileID: 8555062971863981459, guid: 77eeb090d4e6ce74fb3c84d51271febc, type: 3}
       propertyPath: J1Score
       value: 
       objectReference: {fileID: 195064661}
@@ -2078,7 +2062,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TimerText: {fileID: 1291517129}
-  StartingGame: {fileID: 0}
+  StartingGame: {fileID: 2066713640}
 --- !u!114 &1291517129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2236,6 +2220,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.91
       objectReference: {fileID: 0}
+    - target: {fileID: 8555062971863981459, guid: 77eeb090d4e6ce74fb3c84d51271febc, type: 3}
+      propertyPath: Winner
+      value: 
+      objectReference: {fileID: 418341286}
     - target: {fileID: 8555062971863981459, guid: 77eeb090d4e6ce74fb3c84d51271febc, type: 3}
       propertyPath: J1Score
       value: 
@@ -2606,8 +2594,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2066713639}
   - component: {fileID: 2066713641}
-  - component: {fileID: 2066713642}
   - component: {fileID: 2066713640}
+  - component: {fileID: 2066713642}
   m_Layer: 5
   m_Name: StartGame
   m_TagString: Untagged
