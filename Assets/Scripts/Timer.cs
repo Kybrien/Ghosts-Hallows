@@ -5,15 +5,15 @@ public class Timer : MonoBehaviour
 {
     public TMPro.TMP_Text TimerText;
     public TMPro.TMP_Text StartingGame;
-
+    public GoalCondition GoalC;
 
     private float timeRemaining = 300; // 5 minutes in seconds
-    private float countdownTime = 3; // 3 seconds countdown
+    private float countdownTime = 3; //countdown
     private bool isCountdownActive = true;
 
     public void RestartCountdown()
     {
-        timeRemaining = 300; // Reset game timer to 5 minutes
+        timeRemaining = 20; // Reset game timer to 5 minutes
         countdownTime = 3; // Reset countdown timer to 3 seconds
         isCountdownActive = true; // Reactivate countdown
         StartingGame.text = ""; // Clear any starting game text
@@ -33,8 +33,7 @@ public class Timer : MonoBehaviour
             {
                 isCountdownActive = false;
                 StartingGame.text = "La partie Commence!";
-                // Optionally add a delay before the game timer starts
-                Invoke("StartGameTimer", 1); // 2 seconds delay
+                Invoke("StartGameTimer", 1); 
             }
         }
         else if (timeRemaining > 0)
@@ -45,10 +44,16 @@ public class Timer : MonoBehaviour
         else
         {
             Debug.Log("Time's Up!");
-            // End game logic here
-        }
-    }
+            StartingGame.text = "Time's Up!";
+            Invoke("CallTimerEnd", 1); 
 
+        }
+
+    }
+    void CallTimerEnd()
+    {
+        GoalC.CheckWinnerOnTimer();
+    }
     void StartGameTimer()
     {
         StartingGame.text = ""; 

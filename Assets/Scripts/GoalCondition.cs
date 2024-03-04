@@ -14,6 +14,8 @@ public class GoalCondition : MonoBehaviour
     public TMPro.TMP_Text J1Score;
     public TMPro.TMP_Text J2Score;
     public TMPro.TMP_Text Winner;
+    public Timer gameTimer;
+    public SoccerBall ball;
 
     void Start()
     {
@@ -58,6 +60,21 @@ public class GoalCondition : MonoBehaviour
             ResetGame();
         }
         else if (scoreJ2 >= 5)
+        {
+            Debug.Log("Player 2 Wins!");
+            Winner.text = "" + "Player 2 Wins!";
+            ResetGame();
+        }
+    }
+    public void CheckWinnerOnTimer()
+    {
+        if (scoreJ1 > scoreJ2)
+        {
+            Debug.Log("Player 1 Wins!");
+            Winner.text = "" + "Player 1 Wins!";
+            ResetGame();
+        }
+        else
         {
             Debug.Log("Player 2 Wins!");
             Winner.text = "" + "Player 2 Wins!";

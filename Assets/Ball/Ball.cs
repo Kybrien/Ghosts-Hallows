@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SoccerBall : MonoBehaviour
@@ -12,6 +10,7 @@ public class SoccerBall : MonoBehaviour
     {
         // Récupère le Rigidbody attaché à la balle
         rb = GetComponent<Rigidbody>();
+
     }
 
     void OnCollisionEnter(Collision collision)
@@ -23,6 +22,13 @@ public class SoccerBall : MonoBehaviour
 
             // Applique la force du coup de pied à la balle
             rb.AddForce(kickDirection * kickForce, ForceMode.Impulse);
+        }
+
+        if (collision.gameObject.CompareTag("GoalP1") || collision.gameObject.CompareTag("GoalP2"))
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
         }
     }
 }
