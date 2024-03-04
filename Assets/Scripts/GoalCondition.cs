@@ -15,7 +15,7 @@ public class GoalCondition : MonoBehaviour
     public TMPro.TMP_Text J2Score;
     public TMPro.TMP_Text Winner;
     public Timer gameTimer;
-    public SoccerBall ball;
+    public AfterGoalTP afterGoalTP;
 
     void Start()
     {
@@ -38,18 +38,32 @@ public class GoalCondition : MonoBehaviour
                 scoreJ1 += scoreValue;
                 Debug.Log("But marqué ! Score J1 : " + scoreJ1);
                 J1Score.text = "" + scoreJ1;
+
+                Winner.text = "GOAAAAAAAL ! Player1";
+                //collision.SetActive(false);
+                Invoke("CleanMessage", 2);
+
             }
             else if (gameObject.CompareTag("GoalP2"))
             {
                 scoreJ2 += scoreValue;
                 Debug.Log("But marqué ! Score J2 : " + scoreJ2);
                 J2Score.text = "" + scoreJ2;
+                Winner.text = "GOAAAAAAAL ! Player1";
+                //collision.SetActive(false);
+                Invoke("CleanMessage", 2);
             }
 
 
             // Réinitialise la position de la balle au point de respawn
             collision.gameObject.transform.position = respawnPoint.position;
+            collision.gameObject.SetActive(true);
         }
+    }
+    void CleanMessage()
+    {
+        Winner.text = "";
+        //afterGoalTP.TeleportPlayers();
     }
     void CheckWinner()
     {

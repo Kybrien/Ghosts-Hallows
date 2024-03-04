@@ -19,7 +19,7 @@ public class AfterGoalTP : MonoBehaviour
     }
 
     // Méthode pour téléporter les joueurs
-    void TeleportPlayers()
+    public void TeleportPlayers()
     {
         // Téléporter le premier joueur à la position de respawn et orienter dans la direction cible
         GameObject player1 = GameObject.Find("Player");
