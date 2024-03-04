@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     public bool isSprinting = false;
     private bool isCrouching = false;
     private bool jumped = false;
+    private bool isJetpackActive = false;
 
 
     [SerializeField] private Image staminaBarImage = null;
@@ -65,16 +66,30 @@ public class PlayerController : MonoBehaviour
 
             //TEST
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+        }
+        if (currentStamina >= jetpackStaminaCost && !isGrounded)
+        {
+            if (context.phase == InputActionPhase.Performed)
+            {
+                isJetpackActive = true;
+                Debug.Log("Jetpack");
+            }
+            else if (context.phase == InputActionPhase.Canceled)
+            {
+                isJetpackActive = false;
+            }
         }
 
-        if (currentStamina >= jetpackStaminaCost && !isGrounded && context.phase == InputActionPhase.Performed)
+
+
+        /*if (currentStamina >= jetpackStaminaCost && !isGrounded)
         {
-            Debug.Log("Jetpack");
             rb.AddForce(Vector3.up * jetpackForce, ForceMode.Impulse);
             currentStamina -= jetpackStaminaCost;
             jumped = false;
-        }
-
+            
+        }*/
 
     }
 
@@ -124,6 +139,20 @@ public class PlayerController : MonoBehaviour
         {
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, standHeight, cameraTransform.localPosition.z);
         }
+
+        if(isJetpackActive && currentStamina > 0)
+        {
+            //Copilot
+            rb.AddForce(Vector3.up * jetpackForce, ForceMode.Acceleration);
+            currentStamina -= jetpackStaminaCost * Time.fixedDeltaTime;
+
+            /*//Base
+            rb.AddForce(Vector3.up * jetpackForce, ForceMode.Impulse);
+            currentStamina -= jetpackStaminaCost;
+            *//*jumped = false;*/
+        }
+
+
         UpdateStaminaBar();
         jumped = false;
     }
