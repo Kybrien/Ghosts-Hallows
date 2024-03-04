@@ -15,15 +15,23 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
     private Vector2 movementInput = Vector2.zero;
-    private bool isSprinting = false;
+    [HideInInspector] public bool isSprinting = false;
     private bool isCrouching = false;
     private bool jumped = false;
 
 
+    //Stam Tuto
+    /*[HideInInspector] public StaminaController _staminaController;*/
+
     private void Start()
     {
+        //Stam tuto
+        _staminaController = GetComponent<StaminaController>();
+
+
         rb = GetComponent<Rigidbody>();
     }
+
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -45,6 +53,8 @@ public class PlayerController : MonoBehaviour
         isCrouching = context.ReadValue<float>() > 0.0f;
     }
 
+
+
     private void FixedUpdate()
     {
         Vector3 movement = new Vector3(movementInput.x, 0, movementInput.y);
@@ -52,11 +62,13 @@ public class PlayerController : MonoBehaviour
         // Réduction des valeurs de vitesse
         movement *= playerSpeed * (isSprinting ? sprintSpeedMultiplier : 1) * (isCrouching ? crouchSpeedMultiplier : 1);
 
-        rb.AddForce(movement, ForceMode.Acceleration); // Utilisation de ForceMode.Force pour une application plus naturelle
+        rb.AddForce(movement, ForceMode.Acceleration); // Utilisation de ForceMode.Acceleration pour que ca donne l'effet du fantome
 
         if (jumped && Mathf.Abs(rb.velocity.y) < 1.00f)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+            /*_staminaController.StaminaJump();*/
         }
         if (jumped && isGrounded)
         {
