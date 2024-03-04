@@ -26,15 +26,13 @@ public class PlayerController : MonoBehaviour
     private bool jumped = false;
 
 
-    [SerializeField] private Slider staminaSlider;
+    [SerializeField] private Image staminaBarImage = null;
 
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         currentStamina = maxStamina;
-        staminaSlider.maxValue = maxStamina;
-        staminaSlider.value = currentStamina;
     }
 
 
@@ -98,8 +96,16 @@ public class PlayerController : MonoBehaviour
         {
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, standHeight, cameraTransform.localPosition.z);
         }
-        staminaSlider.value = currentStamina;
+        UpdateStaminaBar();
         jumped = false;
+    }
+
+    private void UpdateStaminaBar()
+    {
+        if (staminaBarImage != null)
+        {
+            staminaBarImage.fillAmount = currentStamina / maxStamina;
+        }
     }
 
 }
