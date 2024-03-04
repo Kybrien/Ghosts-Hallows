@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -11,25 +12,29 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float standHeight = 1.0f;
     [SerializeField] private float crouchHeight = 0.5f;
-    private bool isGrounded = false;
+    [SerializeField] private float maxStamina = 100f;
+    [SerializeField] private float staminaDrain = 10f;
+    [SerializeField] private float staminaRegenRate = 5f;
+    [SerializeField] private float jumpStaminaCost = 20f;
 
+    private float currentStamina;
+    private bool isGrounded = false;
     private Rigidbody rb;
     private Vector2 movementInput = Vector2.zero;
-    [HideInInspector] public bool isSprinting = false;
+    public bool isSprinting = false;
     private bool isCrouching = false;
     private bool jumped = false;
 
 
-    //Stam Tuto
-    /*[HideInInspector] public StaminaController _staminaController;*/
+    [SerializeField] private Slider staminaSlider;
+
 
     private void Start()
     {
-        //Stam tuto
-        _staminaController = GetComponent<StaminaController>();
-
-
         rb = GetComponent<Rigidbody>();
+        currentStamina = maxStamina;
+        staminaSlider.maxValue = maxStamina;
+        staminaSlider.value = currentStamina;
     }
 
 
@@ -38,9 +43,14 @@ public class PlayerController : MonoBehaviour
         movementInput = context.ReadValue<Vector2>();
     }
 
+
     public void OnJump(InputAction.CallbackContext context)
     {
-        jumped = context.ReadValue<float>() > 0.0f;
+        if (currentStamina >= jumpStaminaCost)
+        {
+            jumped = context.ReadValue<float>() > 0.0f;
+            if (jumped) currentStamina -= jumpStaminaCost;
+        }
     }
 
     public void OnSprint(InputAction.CallbackContext context)
@@ -59,24 +69,27 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 movement = new Vector3(movementInput.x, 0, movementInput.y);
         movement = transform.TransformDirection(movement);
-        // Réduction des valeurs de vitesse
-        movement *= playerSpeed * (isSprinting ? sprintSpeedMultiplier : 1) * (isCrouching ? crouchSpeedMultiplier : 1);
 
-        rb.AddForce(movement, ForceMode.Acceleration); // Utilisation de ForceMode.Acceleration pour que ca donne l'effet du fantome
-
-        if (jumped && Mathf.Abs(rb.velocity.y) < 1.00f)
+        if (isSprinting && currentStamina > 0)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-            /*_staminaController.StaminaJump();*/
+            movement *= playerSpeed * sprintSpeedMultiplier;
+            currentStamina -= staminaDrain * Time.fixedDeltaTime;
         }
+        else
+        {
+            movement *= playerSpeed * (isCrouching ? crouchSpeedMultiplier : 1);
+            if (currentStamina < maxStamina)
+                currentStamina += staminaRegenRate * Time.fixedDeltaTime;
+        }
+
+        rb.AddForce(movement, ForceMode.Acceleration);
+
         if (jumped && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            isGrounded = false;  // Réinitialiser isGrounded
+            isGrounded = false;
         }
 
-        // Gestion de la hauteur de la caméra pour l'accroupissement
         if (isCrouching)
         {
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, crouchHeight, cameraTransform.localPosition.z);
@@ -85,8 +98,8 @@ public class PlayerController : MonoBehaviour
         {
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, standHeight, cameraTransform.localPosition.z);
         }
-
-        jumped = false; // Réinitialisation de l'état de saut
+        staminaSlider.value = currentStamina;
+        jumped = false;
     }
 
 }

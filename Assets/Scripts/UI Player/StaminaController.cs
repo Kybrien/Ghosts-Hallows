@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -62,7 +62,9 @@ public class StaminaController : MonoBehaviour
             if (playerStamina <= 0)
             {
                 hasRegenerated = false;
-                //Slow the player
+
+                //Slow the player here 
+
                 sliderCanvaGroup.alpha = 0;
             }
         }
@@ -95,3 +97,4 @@ public class StaminaController : MonoBehaviour
 
 
 }
+*/
