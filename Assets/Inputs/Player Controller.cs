@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     private bool isCrouching = false;
     private bool jumped = false;
     private bool isJetpackActive = false;
+    private float timeHoldingButton = 0f;
+    private float requiredHoldTime = 1f;
 
 
     [SerializeField] private Image staminaBarImage = null;
@@ -80,16 +82,6 @@ public class PlayerController : MonoBehaviour
                 isJetpackActive = false;
             }
         }
-
-
-
-        /*if (currentStamina >= jetpackStaminaCost && !isGrounded)
-        {
-            rb.AddForce(Vector3.up * jetpackForce, ForceMode.Impulse);
-            currentStamina -= jetpackStaminaCost;
-            jumped = false;
-            
-        }*/
 
     }
 
@@ -143,13 +135,12 @@ public class PlayerController : MonoBehaviour
         if(isJetpackActive && currentStamina > 0)
         {
             //Copilot
-            rb.AddForce(Vector3.up * jetpackForce, ForceMode.Acceleration);
-            currentStamina -= jetpackStaminaCost * Time.fixedDeltaTime;
+            /*rb.AddForce(Vector3.up * jetpackForce, ForceMode.Acceleration);
+            currentStamina -= jetpackStaminaCost * Time.fixedDeltaTime;*/
 
-            /*//Base
+            //Base
             rb.AddForce(Vector3.up * jetpackForce, ForceMode.Impulse);
             currentStamina -= jetpackStaminaCost;
-            *//*jumped = false;*/
         }
 
 
