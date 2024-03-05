@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jetpackForce = 5.0f;
     [SerializeField] private float sprintSpeedMultiplier = 1.5f;
     [SerializeField] private float crouchSpeedMultiplier = 0.5f;
-    
+    [SerializeField] private float fastFallForce = 10.0f;
+
 
     [Header("Camera Settings")]
     [SerializeField] private Transform cameraTransform;
@@ -32,9 +33,8 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = true;
     private Rigidbody rb;
     private Vector2 movementInput = Vector2.zero;
-    public bool isSprinting = false;
+    private bool isSprinting = false;
     private bool isCrouching = false;
-    private bool jumped = false;
     private bool isJetpackActive = false;
 
     [SerializeField] private Image staminaBarImage = null;
@@ -96,9 +96,17 @@ public class PlayerController : MonoBehaviour
         isCrouching = context.ReadValue<float>() > 0.0f;
     }
 
-    void OnCollisionStay(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.parent.tag == "Map")
+        /*if(collision.transform.parent.tag == "Map")
+        {
+            isGrounded = true;
+        }*/
+        if (collision.transform.parent != null && collision.transform.parent.tag == "Map")
+        {
+            isGrounded = true;
+        }
+        else if (collision.gameObject.tag == "Map")
         {
             isGrounded = true;
         }
@@ -120,7 +128,6 @@ public class PlayerController : MonoBehaviour
             if (currentStamina < maxStamina)
                 currentStamina += staminaRegenRate * Time.fixedDeltaTime;
         }
-
         rb.AddForce(movement, ForceMode.Acceleration);
 
         if (isCrouching)
@@ -142,10 +149,14 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jetpackForce, ForceMode.Impulse);
             currentStamina -= jetpackStaminaCost;
         }
+        if (!isGrounded && isCrouching)
+        {
+            Debug.Log("FAST FALL");
+            rb.AddForce(Vector3.down * fastFallForce, ForceMode.Acceleration);
+        }
 
 
         UpdateStaminaBar();
-        jumped = false;
     }
 
     private void UpdateStaminaBar()
