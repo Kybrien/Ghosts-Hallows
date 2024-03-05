@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Generator : MonoBehaviour
@@ -7,9 +8,11 @@ public class Generator : MonoBehaviour
     [SerializeField] private Transform obstaclePrefab;
     [SerializeField] private int obstacleCountTarget;
     [SerializeField] private float levelWidth;
-    [SerializeField] private int levelDepth;
-    [SerializeField] private int minScale;
-    [SerializeField] private int maxScale;
+    [SerializeField] private float levelDepth;
+    [SerializeField] private float minScale;
+    [SerializeField] private float maxScale;
+    [SerializeField] private float minDistance;
+    [SerializeField] private int triesCount;
 
     [SerializeField] private int Spread;
 
@@ -45,6 +48,49 @@ public class Generator : MonoBehaviour
         }
     }
 
+    public void GeneratePoisson()
+    {
+        List<Vector3> points = new List<Vector3>();
+        points.Add(Vector3.zero);
+        int count = 0;
+        while (points.Count > 0 && count < obstacleCountTarget)
+        {
+            int SelectedIndex = Random.Range(0, points.Count);
+            Vector3 point = points[SelectedIndex];
+            
+            int tries = triesCount;
+            while (tries > 0)
+            {
+                Vector3 newPos = point + GetRandomPoint();
+                bool valid = true;
+                for (int i = 0; i < obstacles.Count; i++)
+                {
+                    if (Vector3.Distance(newPos, obstacles[i].position) < minDistance)
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (valid)
+                {
+
+                    obstacles.Add(CreateObject(newPos));
+                    points.Add(newPos);
+                }
+                else
+                {
+                    points.RemoveAt(SelectedIndex);
+                }
+            }
+           
+        }
+    }
+    private Vector3 GetRandomPoint()
+    {
+        Vector2 randomPoints = Random.insideUnitSphere;
+        return new Vector3(randomPoints.x, 0, randomPoints.y);
+
+    }
     private Transform CreateObject(Vector3 pos)
     {
         RaycastHit hitinfo;
@@ -59,15 +105,4 @@ public class Generator : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
