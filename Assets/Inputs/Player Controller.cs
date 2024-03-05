@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float standHeight = 1.0f;
     [SerializeField] private float crouchHeight = 0.5f;
+    [SerializeField] private Transform arrowTransform;
 
     [Header("Stamina Settings")]
     [SerializeField] private float maxStamina = 100f;
@@ -133,10 +134,13 @@ public class PlayerController : MonoBehaviour
         if (isCrouching)
         {
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, crouchHeight, cameraTransform.localPosition.z);
+            arrowTransform.localPosition = new Vector3(arrowTransform.localPosition.x, 0, arrowTransform.localPosition.z);
+
         }
         else
         {
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, standHeight, cameraTransform.localPosition.z);
+            arrowTransform.localPosition = new Vector3(arrowTransform.localPosition.x, 0.5f, arrowTransform.localPosition.z);
         }
 
         if(isJetpackActive && currentStamina > 0)
