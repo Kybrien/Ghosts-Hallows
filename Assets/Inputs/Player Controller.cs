@@ -5,8 +5,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-
-
     [Header("Player Settings")]
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float jumpForce = 5.0f;
@@ -15,12 +13,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float crouchSpeedMultiplier = 0.5f;
     [SerializeField] private float fastFallForce = 10.0f;
 
-
     [Header("Camera Settings")]
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private float defaultFOV = 70f;  // FOV par défaut
+    [SerializeField] private float sprintFOV = 85f;   // FOV lors du sprint
+    [SerializeField] private float fovChangeSpeed = 10f;
     [SerializeField] private float standHeight = 1.0f;
     [SerializeField] private float crouchHeight = 0.5f;
     [SerializeField] private Transform arrowTransform;
+    
 
     [Header("Stamina Settings")]
     [SerializeField] private float maxStamina = 100f;
@@ -29,24 +30,30 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpStaminaCost = 20f;
     [SerializeField] private float jetpackStaminaCost = 5f;
 
+    [Header("Appearence Settings")]
+    [SerializeField] private GameObject landingFXPrefab;
+    [SerializeField] private Image staminaBarImage = null;
 
+    private Rigidbody rb;
     private float currentStamina;
     private bool isGrounded = true;
-    private Rigidbody rb;
-    private Vector2 movementInput = Vector2.zero;
     private bool isSprinting = false;
     private bool isCrouching = false;
+    private bool isFastFalling = false;
     private bool isJetpackActive = false;
+    private Vector2 movementInput = Vector2.zero;
+    //GPT
+    private Camera playerCamera; // Ajoutez un champ pour la caméra
 
-    [SerializeField] private Image staminaBarImage = null;
 
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         currentStamina = maxStamina;
+        playerCamera = cameraTransform.GetComponent<Camera>(); // Initialiser la caméra
+        playerCamera.fieldOfView = defaultFOV;// Initialiser le FOV
     }
-
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -95,14 +102,19 @@ public class PlayerController : MonoBehaviour
     public void OnCrouch(InputAction.CallbackContext context)
     {
         isCrouching = context.ReadValue<float>() > 0.0f;
+        //On active isFastFalling que si la touche est maintenue dans les airs
+        if (!isGrounded && isCrouching)
+        {
+            isFastFalling = true;
+        }
+        else
+        {
+            isFastFalling = false;
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        /*if(collision.transform.parent.tag == "Map")
-        {
-            isGrounded = true;
-        }*/
         if (collision.transform.parent != null && collision.transform.parent.tag == "Map")
         {
             isGrounded = true;
@@ -129,6 +141,18 @@ public class PlayerController : MonoBehaviour
             if (currentStamina < maxStamina)
                 currentStamina += staminaRegenRate * Time.fixedDeltaTime;
         }
+
+        if (isSprinting && playerCamera.fieldOfView < sprintFOV)
+        {
+            // Augmenter progressivement le FOV jusqu'à atteindre sprintFOV
+            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, sprintFOV, fovChangeSpeed * Time.deltaTime);
+        }
+        else if (!isSprinting && playerCamera.fieldOfView > defaultFOV)
+        {
+            // Diminuer progressivement le FOV jusqu'à atteindre defaultFOV
+            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, defaultFOV, fovChangeSpeed * Time.deltaTime);
+        }
+
         rb.AddForce(movement, ForceMode.Acceleration);
 
         if (isCrouching)
@@ -156,7 +180,14 @@ public class PlayerController : MonoBehaviour
         if (!isGrounded && isCrouching)
         {
             Debug.Log("FAST FALL");
+            isFastFalling = true;
             rb.AddForce(Vector3.down * fastFallForce, ForceMode.Acceleration);
+            
+        }
+        if (isFastFalling && isGrounded)
+        {
+            Instantiate(landingFXPrefab, transform.position, Quaternion.identity);
+            isFastFalling = false;
         }
 
 
