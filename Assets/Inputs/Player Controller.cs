@@ -36,9 +36,6 @@ public class PlayerController : MonoBehaviour
     private bool isCrouching = false;
     private bool jumped = false;
     private bool isJetpackActive = false;
-    private float timeHoldingButton = 0f;
-    private float requiredHoldTime = 1f;
-
 
     [SerializeField] private Image staminaBarImage = null;
 
@@ -59,30 +56,33 @@ public class PlayerController : MonoBehaviour
     //OnJump PERSO
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (currentStamina >= jumpStaminaCost && isGrounded && context.phase == InputActionPhase.Started)
+        switch (context.phase)
         {
-            Debug.Log("Jump");
-            jumped = context.ReadValue<float>() > 0.0f;
-            if (jumped) currentStamina -= jumpStaminaCost;
-            isGrounded = false;
+            case InputActionPhase.Started:
+                // Le joueur démarre un saut
+                if (isGrounded && currentStamina >= jumpStaminaCost)
+                {
+                    Debug.Log("Jump");
+                    rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                    currentStamina -= jumpStaminaCost;
+                    isGrounded = false;
+                }
+                break;
 
-            //TEST
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            case InputActionPhase.Performed:
+                // Le joueur active le jetpack après avoir commencé à sauter
+                if (!isGrounded && currentStamina >= jetpackStaminaCost)
+                {
+                    Debug.Log("Jetpack");
+                    isJetpackActive = true;
+                }
+                break;
 
-        }
-        if (currentStamina >= jetpackStaminaCost && !isGrounded)
-        {
-            if (context.phase == InputActionPhase.Performed)
-            {
-                isJetpackActive = true;
-                Debug.Log("Jetpack");
-            }
-            else if (context.phase == InputActionPhase.Canceled)
-            {
+            case InputActionPhase.Canceled:
+                // Le joueur relâche la touche, désactivant le jetpack
                 isJetpackActive = false;
-            }
+                break;
         }
-
     }
 
 
