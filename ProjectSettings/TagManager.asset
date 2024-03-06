@@ -11,6 +11,9 @@ TagManager:
   - TP
   - GoalP2
   - GoalP1
+  - Map
+  - Overlay
+  - TP_MATCH
   layers:
   - Default
   - TransparentFX
