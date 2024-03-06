@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069467889947468853}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.862437, z: -0, w: -0.5061645}
+  m_LocalRotation: {x: 0, y: 0.8624387, z: -0, w: -0.5061616}
   m_LocalPosition: {x: -270.23865, y: 6.0300007, z: -131.66806}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_NotificationBehavior: 2
-  m_MaxPlayerCount: 3
+  m_MaxPlayerCount: 2
   m_AllowJoining: 1
   m_JoinBehavior: 0
   m_PlayerJoinedEvent:
