@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
                 // Le joueur démarre un saut
                 if (isGrounded && currentStamina >= jumpStaminaCost)
                 {
-                    Debug.Log("Jump");
+                    /*Debug.Log("Jump");*/
                     rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                     currentStamina -= jumpStaminaCost;
                     isGrounded = false;
@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
                 // Le joueur active le jetpack après avoir commencé à sauter
                 if (!isGrounded && currentStamina >= jetpackStaminaCost)
                 {
-                    Debug.Log("Jetpack");
+                    /*Debug.Log("Jetpack");*/
                     isJetpackActive = true;
                 }
                 break;
