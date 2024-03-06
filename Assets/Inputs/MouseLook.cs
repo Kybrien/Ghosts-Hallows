@@ -5,6 +5,7 @@ namespace Polyperfect.Universal
 {
     public class MouseLook : MonoBehaviour
     {
+
         public float mouseSensitivity = 100f;
         public float controllerSensitivity = 100f;
         public Transform playerBody;
