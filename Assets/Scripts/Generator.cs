@@ -17,6 +17,21 @@ public class Generator : MonoBehaviour
     [SerializeField] private int Spread;
 
     private List<Transform> obstacles = new List<Transform>();
+
+    public void Start()
+    {
+        Debug.Log("Generator Awake");
+        //Clear();
+        GeneratePoisson();
+    }
+    public void Clear()
+    {
+        for (int i = 0; i < obstacles.Count; i++)
+        {
+            Destroy(obstacles[i].gameObject);
+        }
+        obstacles.Clear();
+    }
     public void Generate()
     {
         int count = 0, safe = 1000;
