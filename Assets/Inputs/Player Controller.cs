@@ -15,13 +15,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("Camera Settings")]
     [SerializeField] private Transform cameraTransform;
-    [SerializeField] private float defaultFOV = 70f;  // FOV par d�faut
+    [SerializeField] private float defaultFOV = 70f;  // FOV par défaut
     [SerializeField] private float sprintFOV = 85f;   // FOV lors du sprint
     [SerializeField] private float fovChangeSpeed = 10f;
     [SerializeField] private float standHeight = 1.0f;
     [SerializeField] private float crouchHeight = 0.5f;
     [SerializeField] private Transform arrowTransform;
-    
+
 
     [Header("Stamina Settings")]
     [SerializeField] private float maxStamina = 100f;
@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     private bool isJetpackActive = false;
     private Vector2 movementInput = Vector2.zero;
     //GPT
-    private Camera playerCamera; // Ajoutez un champ pour la cam�ra
+    private Camera playerCamera; // Ajoutez un champ pour la caméra
 
 
 
@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         currentStamina = maxStamina;
-        playerCamera = cameraTransform.GetComponent<Camera>(); // Initialiser la cam�ra
+        playerCamera = cameraTransform.GetComponent<Camera>(); // Initialiser la caméra
         playerCamera.fieldOfView = defaultFOV;// Initialiser le FOV
     }
 
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
         switch (context.phase)
         {
             case InputActionPhase.Started:
-                // Le joueur d�marre un saut
+                // Le joueur démarre un saut
                 if (isGrounded && currentStamina >= jumpStaminaCost)
                 {
                     Debug.Log("Jump");
@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case InputActionPhase.Performed:
-                // Le joueur active le jetpack apr�s avoir commenc� � sauter
+                // Le joueur active le jetpack après avoir commencé à sauter
                 if (!isGrounded && currentStamina >= jetpackStaminaCost)
                 {
                     Debug.Log("Jetpack");
@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case InputActionPhase.Canceled:
-                // Le joueur rel�che la touche, d�sactivant le jetpack
+                // Le joueur relâche la touche, désactivant le jetpack
                 isJetpackActive = false;
                 break;
         }
@@ -144,12 +144,12 @@ public class PlayerController : MonoBehaviour
 
         if (isSprinting && playerCamera.fieldOfView < sprintFOV)
         {
-            // Augmenter progressivement le FOV jusqu'� atteindre sprintFOV
+            // Augmenter progressivement le FOV jusqu'à atteindre sprintFOV
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, sprintFOV, fovChangeSpeed * Time.deltaTime);
         }
         else if (!isSprinting && playerCamera.fieldOfView > defaultFOV)
         {
-            // Diminuer progressivement le FOV jusqu'� atteindre defaultFOV
+            // Diminuer progressivement le FOV jusqu'à atteindre defaultFOV
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, defaultFOV, fovChangeSpeed * Time.deltaTime);
         }
 
@@ -166,16 +166,8 @@ public class PlayerController : MonoBehaviour
             cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, standHeight, cameraTransform.localPosition.z);
             arrowTransform.localPosition = new Vector3(arrowTransform.localPosition.x, 0.5f, arrowTransform.localPosition.z);
         }
-        if (Physics.Raycast(transform.position, -transform.up, collider.height * 0.5f + 0.1f))
-        {
-            Debug.Log("Ground");
-        }
-        else
-        {
-            Debug.Log("Air");
-        }
 
-        if(isJetpackActive && currentStamina > 0)
+        if (isJetpackActive && currentStamina > 0)
         {
             //Copilot
             /*rb.AddForce(Vector3.up * jetpackForce, ForceMode.Acceleration);
@@ -190,7 +182,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("FAST FALL");
             isFastFalling = true;
             rb.AddForce(Vector3.down * fastFallForce, ForceMode.Acceleration);
-            
+
         }
         if (isFastFalling && isGrounded)
         {
