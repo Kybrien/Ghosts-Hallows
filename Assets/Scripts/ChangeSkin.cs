@@ -34,8 +34,9 @@ public class ChangeMeshOnCollision : MonoBehaviour
                 playerMeshRenderer.sharedMesh = ghostMeshRenderer.sharedMesh;
 
                 //On fait apparaitre le fx voulu
+                Instantiate(FX_skinChanging, transform.position, Quaternion.identity);
 
-                
+
             }
         }
     }
