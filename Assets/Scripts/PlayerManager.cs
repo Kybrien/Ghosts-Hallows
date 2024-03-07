@@ -38,4 +38,10 @@ public class PlayerManager : MonoBehaviour
     {
         return playerIDs.Count;
     }
+
+    // New method to get all player GameObjects
+    public List<GameObject> GetAllPlayers()
+    {
+        return new List<GameObject>(playerObjects.Values);
+    }
 }

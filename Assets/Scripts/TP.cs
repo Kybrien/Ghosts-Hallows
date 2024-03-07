@@ -5,10 +5,13 @@ public class TP : MonoBehaviour
 {
     public Transform respawnPoint;
     public Transform targetDirection;
+
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Contact");
         if (collision.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Contact Player");
             // Appel d'une méthode pour déplacer le joueur
             TeleportPlayer(collision.gameObject);
         }

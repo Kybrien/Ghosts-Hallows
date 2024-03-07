@@ -1,28 +1,29 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class GameTransition : MonoBehaviour
+public class Game_Transition : MonoBehaviour
 {
-    // Dictionnaire pour stocker les points de respawn en fonction des playerID
-    public Dictionary<int, Transform> playerRespawnPoints = new Dictionary<int, Transform>();
-    public Transform targetDirection;
+    public List<Transform> teleportationPoints;
 
-    void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collider)
     {
-        // Vérifie si le GameObject qui a déclenché la collision a un PlayerID
-        PlayerID playerIDComponent = collision.gameObject.GetComponent<PlayerID>();
-        if (playerIDComponent != null && playerRespawnPoints.ContainsKey(playerIDComponent.ID))
+        Debug.Log("Collision detected");
+        if (collider.gameObject.CompareTag("Player"))
         {
-            // Téléporte le joueur au point de respawn correspondant à son ID
-            TeleportPlayer(collision.gameObject, playerRespawnPoints[playerIDComponent.ID]);
+            TeleportAllPlayers();
         }
     }
 
-    // Méthode pour déplacer le joueur au point de respawn spécifique
-    void TeleportPlayer(GameObject player, Transform respawnPoint)
+    private void TeleportAllPlayers()
     {
-        player.transform.position = respawnPoint.position;
-        player.transform.LookAt(targetDirection);
-        Debug.Log("TP");
+        var players = PlayerManager.Instance.GetAllPlayers();
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (i < teleportationPoints.Count)
+            {
+                players[i].transform.position = teleportationPoints[i].position;
+                /*players[i].transform.LookAt(teleportationPoints[i].position + Vector3.forward);*/  // Adjust this if you need a specific orientation
+            }
+        }
     }
-}
+} 
