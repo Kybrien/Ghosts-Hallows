@@ -13,7 +13,6 @@ public class GoalCondition : MonoBehaviour
     public TMPro.TMP_Text J1Score;
     public TMPro.TMP_Text J2Score;
     public TMPro.TMP_Text Winner;
-    public AfterGoalTP afterGoalTP;
 
     void Start()
     {
@@ -38,7 +37,6 @@ public class GoalCondition : MonoBehaviour
                 J1Score.text = "" + scoreJ1;
 
                 Winner.text = "GOAAAAAAAL ! Player1";
-                //collision.SetActive(false);
                 Invoke("CleanMessage", 2);
 
             }
@@ -48,7 +46,6 @@ public class GoalCondition : MonoBehaviour
                 Debug.Log("But marqué ! Score J2 : " + scoreJ2);
                 J2Score.text = "" + scoreJ2;
                 Winner.text = "GOAAAAAAAL ! Player1";
-                //collision.SetActive(false);
                 Invoke("CleanMessage", 2);
             }
 
@@ -61,7 +58,6 @@ public class GoalCondition : MonoBehaviour
     void CleanMessage()
     {
         Winner.text = "";
-        //afterGoalTP.TeleportPlayers();
     }
     void CheckWinner()
     {
