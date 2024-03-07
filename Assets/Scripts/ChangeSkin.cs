@@ -5,6 +5,7 @@ public class ChangeMeshOnCollision : MonoBehaviour
     public GameObject playerMeshObject; // Assignez ici le GameObject du joueur ayant le SkinnedMeshRenderer
 
     private SkinnedMeshRenderer playerMeshRenderer;
+    [SerializeField] private GameObject FX_skinChanging;
 
     void Start()
     {
@@ -31,6 +32,10 @@ public class ChangeMeshOnCollision : MonoBehaviour
                 // Change le mesh et le matériel du joueur pour celui du fantôme
                 playerMeshRenderer.material = ghostMeshRenderer.material;
                 playerMeshRenderer.sharedMesh = ghostMeshRenderer.sharedMesh;
+
+                //On fait apparaitre le fx voulu
+
+                
             }
         }
     }
