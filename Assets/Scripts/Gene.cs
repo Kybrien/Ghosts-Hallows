@@ -36,7 +36,6 @@ public class Gene : MonoBehaviour
         List<GameObject> obstaclesList = new();
 
         GameObject obstacles = new GameObject("Obstacles");
-        obstacles = obstacles;
 
         obstaclesList.Add(player2Pos.gameObject);
         obstaclesList.Add(playerPos.gameObject);
@@ -66,7 +65,7 @@ public class Gene : MonoBehaviour
                 Vector3 newPos = point + GetRandomPoint();
 
                 bool valid = true;
-                if (newPos.x > 50 || newPos.x < -50 || newPos.z > -150 || newPos.z < -240)
+                if (newPos.x > initPoint.position.x + 55 || newPos.x < initPoint.position.x - 55 || newPos.z > initPoint.position.z+55 || newPos.z < initPoint.position.z-55)
                     {
                     valid = false;
                 }

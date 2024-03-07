@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class GoalCondition : MonoBehaviour
 {
     public Transform respawnPoint; // Point de respawn de la balle
@@ -14,7 +13,6 @@ public class GoalCondition : MonoBehaviour
     public TMPro.TMP_Text J1Score;
     public TMPro.TMP_Text J2Score;
     public TMPro.TMP_Text Winner;
-    public Timer gameTimer;
     public AfterGoalTP afterGoalTP;
 
     void Start()
@@ -88,10 +86,16 @@ public class GoalCondition : MonoBehaviour
             Winner.text = "" + "Player 1 Wins!";
             ResetGame();
         }
-        else
+        if (scoreJ1 < scoreJ2)
         {
             Debug.Log("Player 2 Wins!");
             Winner.text = "" + "Player 2 Wins!";
+            ResetGame();
+        }
+        else
+        {
+            Debug.Log("Egalite");
+            Winner.text = "" + "Egalité !";
             ResetGame();
         }
     }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Game_Transition : MonoBehaviour
 {
     public List<Transform> teleportationPoints;
@@ -10,7 +9,11 @@ public class Game_Transition : MonoBehaviour
         Debug.Log("Collision detected");
         if (collider.gameObject.CompareTag("Player"))
         {
+
+            initMatchOverlay.OverlayActive();
+            Timer.StartMatch();
             TeleportAllPlayers();
+
         }
     }
 
@@ -26,4 +29,6 @@ public class Game_Transition : MonoBehaviour
             }
         }
     }
+
+
 } 
