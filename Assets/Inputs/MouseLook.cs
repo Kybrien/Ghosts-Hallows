@@ -22,7 +22,7 @@ namespace Polyperfect.Universal
             playerInput = GetComponent<PlayerInput>();
 
             Cursor.lockState = CursorLockMode.Locked;
-            playerID = PlayerManager.Instance.RegisterPlayer();
+            playerID = PlayerManager.Instance.RegisterPlayer(transform.parent.gameObject);
         }
 
         void Update()
