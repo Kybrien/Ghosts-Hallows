@@ -1,31 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ChangeSkin : MonoBehaviour
+public class ChangeMeshOnCollision : MonoBehaviour
 {
-    private MeshRenderer playerMeshRenderer;
-    private MeshFilter playerMeshFilter;
+    public GameObject playerMeshObject; // Assignez ici le GameObject du joueur ayant le SkinnedMeshRenderer
+
+    private SkinnedMeshRenderer playerMeshRenderer;
 
     void Start()
     {
-        // Initialiser les composants MeshRenderer et MeshFilter du joueur
-        playerMeshRenderer = GetComponent<MeshRenderer>();
-        playerMeshFilter = GetComponent<MeshFilter>();
+        if (playerMeshObject == null)
+        {
+            Debug.LogError("Player mesh object is not assigned!");
+            return;
+        }
+
+        // Initialiser le composant SkinnedMeshRenderer du joueur
+        playerMeshRenderer = playerMeshObject.GetComponent<SkinnedMeshRenderer>();
     }
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ghost"))
         {
-            MeshRenderer ghostMeshRenderer = collision.gameObject.GetComponent<MeshRenderer>();
-            MeshFilter ghostMeshFilter = collision.gameObject.GetComponent<MeshFilter>();
+            // Cherchez le SkinnedMeshRenderer dans le sous-objet du fantôme
+            SkinnedMeshRenderer ghostMeshRenderer = collision.gameObject.transform.Find("GhostMesh").GetComponent<SkinnedMeshRenderer>();
 
-            if (ghostMeshRenderer != null && ghostMeshFilter != null)
+            if (ghostMeshRenderer != null && playerMeshRenderer != null)
             {
+                Debug.Log("Conditions remplises");
                 // Change le mesh et le matériel du joueur pour celui du fantôme
                 playerMeshRenderer.material = ghostMeshRenderer.material;
-                playerMeshFilter.mesh = ghostMeshFilter.mesh;
+                playerMeshRenderer.sharedMesh = ghostMeshRenderer.sharedMesh;
             }
         }
     }
