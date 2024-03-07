@@ -4,25 +4,32 @@ using UnityEngine;
 
 public class Gene : MonoBehaviour
 {
+    [SerializeField] private Transform initPoint;
     [SerializeField] private Transform ballPos;
+
     [SerializeField] private Transform player2Pos;
     [SerializeField] private Transform playerPos;
-    [SerializeField] private Transform goal1Pos;
-    [SerializeField] private Transform goal2Pos;
+
+    [SerializeField] private Transform rock1;
+    [SerializeField] private Transform rock2;
+    [SerializeField] private Transform tree;
+    [SerializeField] private Transform mushroom;
+    [SerializeField] private Transform tree2;
+
+    [SerializeField] private int numberObstacles;
+    [SerializeField] private float minDistance;
+
+    [SerializeField] private int spread;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        GenerateRandomObstacle();  
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  
     void GenerateRandomObstacle()
     {
         List<Vector3> position = new();
@@ -31,39 +38,35 @@ public class Gene : MonoBehaviour
         GameObject obstacles = new GameObject("Obstacles");
         obstacles = obstacles;
 
-        obstaclesList.Add(ballPos.gameObject);
         obstaclesList.Add(player2Pos.gameObject);
         obstaclesList.Add(playerPos.gameObject);
-        obstaclesList.Add(goal1Pos.gameObject);
-        obstaclesList.Add(goal2Pos.gameObject);
 
 
 
-        Vector3 positionInitiale = new Vector3(-20, 0, -40);
+        Vector3 positionInitiale = new Vector3(initPoint.position.x, initPoint.position.y, initPoint.position.z);
         GameObject item = CreateNewItem(position.Count, positionInitiale);
         item.transform.parent = obstacles.transform;
         obstaclesList.Add(item);
         position.Add(positionInitiale);
 
 
-        numberObstacles = Random.Range(30, 50);
         Debug.Log(numberObstacles);
 
-        int safeCount = 0;
-        while (position.Count > 0 && safeCount++ < numberObstacles)
+        int safeCount = 1;
+        while (position.Count > 0 && safeCount < numberObstacles)
         {
 
             int selectedIndex = Random.Range(0, position.Count);
             Vector3 point = position[selectedIndex];
 
-            int tries = 400;
-            while (tries-- > 0)
+            int tries = 1000;
+            while (tries > 0)
             {
 
                 Vector3 newPos = point + GetRandomPoint();
 
                 bool valid = true;
-                if (newPos.x > 20 || newPos.x < -20 || newPos.z > 40 || newPos.z < -40)
+                if (newPos.x > 50 || newPos.x < -50 || newPos.z > -150 || newPos.z < -240)
                     {
                     valid = false;
                 }
@@ -84,10 +87,13 @@ public class Gene : MonoBehaviour
                     item.transform.parent = obstacles.transform;
                     obstaclesList.Add(item);
                     position.Add(newPos);
-                    break;
+                    
                 }
+                Debug.Log("Tries: " + tries);
+                tries--;
             }
-
+            Debug.Log("SafeCount: " + safeCount);
+            safeCount++;
         }
 
 
@@ -100,20 +106,20 @@ public class Gene : MonoBehaviour
 
         GameObject GetPrefab()
         {
-            int prefabGenerated = Random.Range(0, 5);
+            int prefabGenerated = Random.Range(0, 4);
 
             switch (prefabGenerated)
             {
-                case 0: // Birch tree
-                    return birchTree;
-                case 1: // Oak tree
-                    return oakTree;
-                case 2: // Rock01
-                    return rock01;
-                case 3: // Rock02
-                    return rock02;
-                case 4: // Rock03
-                    return rock03;
+                case 0: 
+                   return rock1.gameObject;
+                case 1:
+                    return rock2.gameObject;
+                case 2:
+                    return tree.gameObject;
+                case 3:
+                    return mushroom.gameObject;
+                case 4:
+                    return tree2.gameObject;
                 default:
                     return null;
             }
@@ -122,13 +128,13 @@ public class Gene : MonoBehaviour
         GameObject CreateNewItem(int i, Vector3 newPos)
         {
             GameObject itemCreated = null;
+            Debug.Log("CreateNewItem");
 
             itemCreated = Instantiate(GetPrefab(), newPos, Quaternion.Euler(0, Random.Range(0, 360), 0));
-            itemCreated.tag = "Obstacle";
             itemCreated.name = "item" + i;
 
             return itemCreated;
         }
     }
 }
-}
+

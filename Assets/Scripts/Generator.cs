@@ -32,36 +32,7 @@ public class Generator : MonoBehaviour
         }
         obstacles.Clear();
     }
-    public void Generate()
-    {
-        int count = 0, safe = 1000;
-        while (count < obstacleCountTarget && safe >0)
-        {
-            Vector3 pos = new Vector3(Random.value * levelWidth - (levelWidth * 0.5f), 20, Random.value * levelDepth - (levelDepth * 0.5f));
-            bool valid = true;
-
-
-
-            for (int i = 0; i < obstacles.Count; i++)
-            {
-                if (Vector3.Distance(new Vector3(pos.x, 0, pos.z), new Vector3(obstacles[i].position.x, 0, obstacles[i].position.z)) < Spread)
- 
-                {
-                    valid = false;
-                    break;
-                }
-            }
-
-            if (valid)
-            {
-                obstacles.Add(CreateObject(pos));
-                count++;
-            }
-
-           safe--;
-
-        }
-    }
+    
 
     public void GeneratePoisson()
     {
