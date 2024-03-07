@@ -98,11 +98,7 @@ public class GoalCondition : MonoBehaviour
 
     void ResetGame()
     {
-        // Reset scores, ball position, and any other necessary game state
-        scoreJ1 = 0;
-        scoreJ2 = 0;
-        J1Score.text = "0";
-        J2Score.text = "0";
+
         Invoke("ResetScene", 2);
 
     }

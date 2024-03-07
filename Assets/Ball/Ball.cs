@@ -13,7 +13,7 @@ public class SoccerBall : MonoBehaviour
 
     }
 
-    void OnTriggerEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ball"))
         {

@@ -9,6 +9,7 @@ public class Game_Transition : MonoBehaviour
         Debug.Log("Collision detected");
         if (collider.gameObject.CompareTag("Player"))
         {
+            //initBall.BallActive();
             initDrone.DroneActive();
             initMatchOverlay.OverlayActive();
             Timer.StartMatch();
