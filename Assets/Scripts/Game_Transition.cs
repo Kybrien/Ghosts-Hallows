@@ -6,7 +6,6 @@ public class Game_Transition : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("Collision detected");
         if (collider.gameObject.CompareTag("Player"))
         {
             initBall.BallActive();

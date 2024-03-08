@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Appearence Settings")]
     [SerializeField] private GameObject landingFXPrefab;
+    [SerializeField] private GameObject StamHitingFX;
     [SerializeField] private Image staminaBarImage = null;
 
     private Rigidbody rb;
@@ -123,6 +124,11 @@ public class PlayerController : MonoBehaviour
             // Appliquez une force à la balle
             Vector3 direction = (ballTransform.position - playerCamera.transform.position).normalized;
             ballTransform.GetComponent<Rigidbody>().AddForce(direction * (currentStamina/65), ForceMode.Impulse);
+            if (currentStamina > 130)
+            {
+                Vector3 effectPosition = ballTransform.position + Vector3.up * 1.0f;
+                Instantiate(StamHitingFX, effectPosition, Quaternion.identity);
+            }
             currentStamina = 0;
         }
     }
