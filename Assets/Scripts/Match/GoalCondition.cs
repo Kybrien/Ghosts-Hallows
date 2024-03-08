@@ -93,11 +93,12 @@ public class GoalCondition : MonoBehaviour
             Winner.text = "" + "Egalité !";
             ResetGame();
         }
+
     }
 
     void ResetGame()
     {
-
+        RenderSettings.fog = false;
         Invoke("ResetScene", 2);
 
     }

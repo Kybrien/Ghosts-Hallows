@@ -14,6 +14,7 @@ public class Game_Transition : MonoBehaviour
             initMatchOverlay.OverlayActive();
             Timer.StartMatch();
             TeleportAllPlayers();
+            RenderSettings.fog = true;
 
         }
     }
@@ -26,7 +27,7 @@ public class Game_Transition : MonoBehaviour
             if (i < teleportationPoints.Count)
             {
                 players[i].transform.position = teleportationPoints[i].position;
-                /*players[i].transform.LookAt(teleportationPoints[i].position + Vector3.forward);*/  // Adjust this if you need a specific orientation
+                
             }
         }
     }

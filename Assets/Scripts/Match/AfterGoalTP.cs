@@ -9,11 +9,14 @@ public class AfterGoalTP : MonoBehaviour
     public Transform targetDirectionPlayer1; // Direction cible pour le premier joueur
     public Transform targetDirectionPlayer2; // Direction cible pour le deuxième joueur
 
+    [SerializeField] private GameObject FX_OnGoal;
+
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
+            Instantiate(FX_OnGoal, transform.position, Quaternion.identity);
             TeleportPlayers();
         }
     }

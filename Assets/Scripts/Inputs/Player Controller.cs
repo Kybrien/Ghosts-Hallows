@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float staminaRegenRate = 5f;
     [SerializeField] private float jumpStaminaCost = 20f;
     [SerializeField] private float jetpackStaminaCost = 5f;
+    [SerializeField] private LayerMask whatIsBall;
+    [SerializeField] private float maxDistanceToHit = 8f;
 
     [Header("Appearence Settings")]
     [SerializeField] private GameObject landingFXPrefab;
@@ -41,9 +43,13 @@ public class PlayerController : MonoBehaviour
     private bool isCrouching = false;
     private bool isFastFalling = false;
     private bool isJetpackActive = false;
+    private bool isAimingAtBall = false;
+    private Transform ballTransform;
+    private Camera playerCamera;
     private Vector2 movementInput = Vector2.zero;
-    //GPT
-    private Camera playerCamera; // Ajoutez un champ pour la caméra
+
+
+    
 
 
 
@@ -70,7 +76,6 @@ public class PlayerController : MonoBehaviour
                 // Le joueur démarre un saut
                 if (isGrounded && currentStamina >= jumpStaminaCost)
                 {
-                    /*Debug.Log("Jump");*/
                     rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                     currentStamina -= jumpStaminaCost;
                     isGrounded = false;
@@ -81,7 +86,6 @@ public class PlayerController : MonoBehaviour
                 // Le joueur active le jetpack après avoir commencé à sauter
                 if (!isGrounded && currentStamina >= jetpackStaminaCost)
                 {
-                    /*Debug.Log("Jetpack");*/
                     isJetpackActive = true;
                 }
                 break;
@@ -112,6 +116,19 @@ public class PlayerController : MonoBehaviour
             isFastFalling = false;
         }
     }
+    public void OnHitStam(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && isAimingAtBall)
+        {
+            // Appliquez une force à la balle
+            Vector3 direction = (ballTransform.position - playerCamera.transform.position).normalized;
+            ballTransform.GetComponent<Rigidbody>().AddForce(direction * (currentStamina/65), ForceMode.Impulse);
+            currentStamina = 0;
+        }
+    }
+
+
+
 
     void OnCollisionEnter(Collision collision)
     {
@@ -129,6 +146,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 movement = new Vector3(movementInput.x, 0, movementInput.y);
         movement = transform.TransformDirection(movement);
+        CheckIfAimingAtBall();
 
         if (isSprinting && currentStamina > 0)
         {
@@ -169,11 +187,6 @@ public class PlayerController : MonoBehaviour
 
         if (isJetpackActive && currentStamina > 0)
         {
-            //Copilot
-            /*rb.AddForce(Vector3.up * jetpackForce, ForceMode.Acceleration);
-            currentStamina -= jetpackStaminaCost * Time.fixedDeltaTime;*/
-
-            //Base
             rb.AddForce(Vector3.up * jetpackForce, ForceMode.Impulse);
             currentStamina -= jetpackStaminaCost;
         }
@@ -199,6 +212,27 @@ public class PlayerController : MonoBehaviour
         if (staminaBarImage != null)
         {
             staminaBarImage.fillAmount = currentStamina / maxStamina;
+        }
+    }
+
+    private void CheckIfAimingAtBall()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, maxDistanceToHit, whatIsBall))
+        {
+            if (hit.collider.gameObject.CompareTag("Ball"))
+            {
+                isAimingAtBall = true;
+                ballTransform = hit.transform;
+            }
+            else
+            {
+                isAimingAtBall = false;
+            }
+        }
+        else
+        {
+            isAimingAtBall = false;
         }
     }
 

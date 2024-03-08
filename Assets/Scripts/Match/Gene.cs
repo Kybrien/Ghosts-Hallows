@@ -49,7 +49,7 @@ public class Gene : MonoBehaviour
         position.Add(positionInitiale);
 
 
-        Debug.Log(numberObstacles);
+        Debug.Log(numberObstacles + " Obstacles generes");
 
         int safeCount = 1;
         while (position.Count > 0 && safeCount < numberObstacles)
