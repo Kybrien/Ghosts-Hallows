@@ -88,10 +88,10 @@ public class Gene : MonoBehaviour
                     position.Add(newPos);
                     
                 }
-                Debug.Log("Tries: " + tries);
+                /*Debug.Log("Tries: " + tries);*/
                 tries--;
             }
-            Debug.Log("SafeCount: " + safeCount);
+            /*Debug.Log("SafeCount: " + safeCount);*/
             safeCount++;
         }
 
@@ -127,13 +127,13 @@ public class Gene : MonoBehaviour
         GameObject CreateNewItem(int i, Vector3 newPos)
         {
             GameObject itemCreated = null;
-            Debug.Log("CreateNewItem");
 
             itemCreated = Instantiate(GetPrefab(), newPos, Quaternion.Euler(0, Random.Range(0, 360), 0));
             itemCreated.name = "item" + i;
 
             return itemCreated;
         }
+        Debug.Log("Map Generated");
     }
 }
 
