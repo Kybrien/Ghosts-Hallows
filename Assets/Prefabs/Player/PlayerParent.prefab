@@ -1168,9 +1168,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7460043237703991594, guid: b049fa8148fdac14b8af01d76fb89ecd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6574322992412141352}
-    - targetCorrespondingSourceObject: {fileID: 7460043237703991594, guid: b049fa8148fdac14b8af01d76fb89ecd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1916946074599417235}
   m_SourcePrefab: {fileID: 100100000, guid: b049fa8148fdac14b8af01d76fb89ecd, type: 3}
 --- !u!1 &1812927756333774144 stripped
 GameObject:
@@ -1212,28 +1209,9 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1916946074599417235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1812927756333774144}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 565ef490cddc59449b274f0f52b08f89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraTransform: {fileID: 6729437145302722635}
-  playerRenderer: {fileID: 8703640782514443991}
 --- !u!20 &2380982485109405533 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 6891992905897067319, guid: b049fa8148fdac14b8af01d76fb89ecd, type: 3}
-  m_PrefabInstance: {fileID: 9128715067395585130}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6729437145302722635 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2579567052386262049, guid: b049fa8148fdac14b8af01d76fb89ecd, type: 3}
   m_PrefabInstance: {fileID: 9128715067395585130}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7790151293504369299 stripped

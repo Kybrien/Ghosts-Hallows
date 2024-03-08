@@ -155,7 +155,6 @@ GameObject:
   - component: {fileID: 5823948851373350834}
   - component: {fileID: 2430975756871056967}
   - component: {fileID: 7737983841916985119}
-  - component: {fileID: 4226997097825689315}
   - component: {fileID: 9197653750748745174}
   - component: {fileID: 1497786468841789031}
   m_Layer: 0
@@ -414,25 +413,6 @@ MonoBehaviour:
   jetpackStaminaCost: 4
   landingFXPrefab: {fileID: 5339739117810204693, guid: 26e1cb216e3635e4a820f58a1118d6b9, type: 3}
   staminaBarImage: {fileID: 0}
---- !u!114 &4226997097825689315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7460043237703991594}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ea9b129223fbd248a04aab5a077f5bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueParent: {fileID: 0}
-  dialogueText: {fileID: 0}
-  option1Button: {fileID: 0}
-  option2Button: {fileID: 0}
-  typingSpeed: 0.05
-  turnSpeed: 2
-  player: {fileID: 7460043237703991594}
 --- !u!136 &9197653750748745174
 CapsuleCollider:
   m_ObjectHideFlags: 0
