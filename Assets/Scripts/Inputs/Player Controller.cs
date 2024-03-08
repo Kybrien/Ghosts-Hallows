@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject landingFXPrefab;
     [SerializeField] private GameObject StamHitingFX;
     [SerializeField] private Image staminaBarImage = null;
+    
 
     private Rigidbody rb;
     private float currentStamina;

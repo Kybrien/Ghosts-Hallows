@@ -8,13 +8,13 @@ public class Game_Transition : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Player"))
         {
+            initArrow.ArrowActive();
             initBall.BallActive();
             initDrone.DroneActive();
             initMatchOverlay.OverlayActive();
             Timer.StartMatch();
             TeleportAllPlayers();
             RenderSettings.fog = true;
-
         }
     }
 
