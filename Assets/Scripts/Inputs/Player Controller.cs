@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpStaminaCost = 20f;
     [SerializeField] private float jetpackStaminaCost = 5f;
     [SerializeField] private LayerMask whatIsBall;
-    [SerializeField] private float maxDistanceToHit = 8f;
+    [SerializeField] private float maxDistanceToHit = 10f;
 
     [Header("Appearence Settings")]
     [SerializeField] private GameObject landingFXPrefab;
@@ -48,9 +48,6 @@ public class PlayerController : MonoBehaviour
     private Transform ballTransform;
     private Camera playerCamera;
     private Vector2 movementInput = Vector2.zero;
-
-
-    
 
 
 
@@ -121,7 +118,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started && isAimingAtBall)
         {
-            // Appliquez une force à la balle
+            // Applique une force à la balle
             Vector3 direction = (ballTransform.position - playerCamera.transform.position).normalized;
             ballTransform.GetComponent<Rigidbody>().AddForce(direction * (currentStamina/65), ForceMode.Impulse);
             if (currentStamina > 130)

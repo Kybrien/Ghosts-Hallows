@@ -11,11 +11,11 @@ public class ChangeMeshOnCollision : MonoBehaviour
     {
         if (playerMeshObject == null)
         {
-            Debug.LogError("Player mesh object is not assigned!");
+            Debug.LogError("Mesh du player non assigné");
             return;
         }
 
-        // Initialiser le composant SkinnedMeshRenderer du joueur
+        // On initialise le composant SkinnedMeshRenderer du joueur
         playerMeshRenderer = playerMeshObject.GetComponent<SkinnedMeshRenderer>();
     }
 
@@ -23,7 +23,7 @@ public class ChangeMeshOnCollision : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ghost"))
         {
-            // Cherchez le SkinnedMeshRenderer dans le sous-objet du fantôme
+            // On cherchezle SkinnedMeshRenderer dans le sous-objet du fantôme
             SkinnedMeshRenderer ghostMeshRenderer = collision.gameObject.transform.Find("GhostMesh").GetComponent<SkinnedMeshRenderer>();
 
             if (ghostMeshRenderer != null && playerMeshRenderer != null)

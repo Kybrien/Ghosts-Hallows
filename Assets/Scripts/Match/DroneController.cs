@@ -28,13 +28,13 @@ public class DroneController : MonoBehaviour
     {
         ballCollider = ball.GetComponent<Collider>();
         ballRigidbody = ball.GetComponent<Rigidbody>();
-        SetNextTargetCube(); // Définir le premier cube cible
+        SetNextTargetCube(); // Définit le premier cube cible
     }
 
     void Update()
     {
         timer += Time.deltaTime;
-        // Mettre à jour le timer depuis le dernier tir de projectile
+        // Met à jour le timer depuis le dernier tir de projectile
         lastProjectileTime += Time.deltaTime;
 
         if (!isChasing)
@@ -44,26 +44,25 @@ public class DroneController : MonoBehaviour
             {
                 Debug.Log("Changement de phase : Chasing");
                 isChasing = true;
-                timer = 0f; // Réinitialiser le compteur de temps
-                ballIsGrabbed = false; // Réinitialiser l'état de la balle
-                ballCollider.enabled = true; // Activer le collider de la balle
-                ballRigidbody.useGravity = true; // Activer la gravité de la balle
+                timer = 0f; // Réinitialise le compteur de temps
+                ballIsGrabbed = false; // Réinitialise l'état de la balle
+                ballCollider.enabled = true; // Active le collider de la balle
+                ballRigidbody.useGravity = true; // Active la gravité de la balle
             }
             else
             {
                 if (lastProjectileTime >= projectileCooldown)
                 {
-                    // Tirer le projectile
+                    // Tire le projectile
                     FireProjectile();
 
-                    // Réinitialiser le temps du dernier tir de projectile
+                    // Réinitialise le temps du dernier tir de projectile
                     lastProjectileTime = 0f;
                 }
                 // Si le drone n'a pas la balle, se déplacer entre les cubes
                 MoveBetweenCubes();
             }
         }
-
 
         else
         {
@@ -106,34 +105,34 @@ public class DroneController : MonoBehaviour
 
     void MoveBetweenCubes()
     {
-        // Si le drone est assez proche du cube cible, choisir le prochain cube cible
+        // Si le drone est assez proche du cube cible, choisit le prochain cube cible
         if (Vector3.Distance(transform.position, targetCube.transform.position) < 0.1f)
         {
             SetNextTargetCube();
         }
         else
         {
-            // Déplacer le drone vers le cube cible
+            // Déplace le drone vers le cube cible
             transform.position = Vector3.MoveTowards(transform.position, targetCube.transform.position, moveSpeed * Time.deltaTime);
         }
     }
 
     void SetNextTargetCube()
     {
-        // Choisir aléatoirement l'un des cubes comme prochaine cible
+        // Choisit aléatoirement l'un des cubes comme prochaine cible
         targetCube = cubes[Random.Range(0, cubes.Length)];
     }
 
     void MoveDroneToTarget()
     {
-        // Si le drone est suffisamment proche de la balle, la saisir
+        // Si le drone est suffisamment proche de la balle, la saisi
         if (Vector3.Distance(transform.position, ball.transform.position) <= grabRange)
         {
             GrabBall();
         }
         else
         {
-            // Déplacer le drone vers la balle avec la vitesse appropriée
+            // Déplace le drone vers la balle avec la vitesse appropriée
             float speed = isChasing ? chasingMoveSpeed : moveSpeed;
             transform.position = Vector3.MoveTowards(transform.position, ball.transform.position, speed * Time.deltaTime);
         }
@@ -141,19 +140,17 @@ public class DroneController : MonoBehaviour
 
     void GrabBall()
     {
-        // Désactiver le collider de la balle pour éviter les interactions pendant qu'elle est tenue par le drone
+        // Désactive le collider de la balle pour éviter les interactions pendant qu'elle est tenue par le drone
         ballCollider.enabled = false;
         ballRigidbody.velocity = Vector3.zero;
         ballRigidbody.angularVelocity = Vector3.zero;
-        // Désactiver la gravité de la balle pendant qu'elle est tenue par le drone
+        // Désactive la gravité de la balle pendant qu'elle est tenue par le drone
         ballRigidbody.useGravity = false;
 
-        // Fixer la position de la balle à celle du drone
+        // Fixe la position de la balle à celle du drone
         ball.transform.position = transform.position;
 
-
-
-        // Mettre à jour l'état de la balle attrapée
+        // Met à jour l'état de la balle attrapée
         ballIsGrabbed = true;
 
         if (ballIsGrabbed == true)

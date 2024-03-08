@@ -10,7 +10,6 @@ public class HideMeshOnView : MonoBehaviour
         if (cameraTransform != null && playerRenderer != null)
         {
             // Détecte si la caméra est orientée vers le bas à un certain angle.
-            // Vous pouvez ajuster l'angle selon vos besoins.
             if (Vector3.Angle(cameraTransform.forward, Vector3.down) < 70)
             {
                 playerRenderer.enabled = false; // Cache le mesh si la caméra est orientée vers le bas.
